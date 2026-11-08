@@ -4,7 +4,6 @@ let allProducts;
 let cart = [];
 let currentProducts = [];
 let currentSortValue = "default";
-let currentFilterProducts = [];
 
 function intialise() {
   fetchingPorducts();
@@ -118,6 +117,7 @@ function filterCategories() {
       })
       .join("");
 
+    currentProducts = content;
     const sortOption = document.querySelector("#sort-select").value;
     const sortedContent = sortData(content, sortOption);
 
@@ -160,8 +160,18 @@ function sortingProducts() {
     const maxPrice =
       Number(document.querySelector("#max-price").value) || Infinity;
 
+    let selectedCategory = document.querySelector("#category-select").value;
+    const categoryMap = {
+      men: "men's clothing",
+      women: "women's clothing",
+      jewellery: "jewelery",
+      electornics: "electornics",
+    };
+
     let filtered = allProducts.filter((i) => {
-      return i.price >= minPrice && i.price <= maxPrice;
+      const category = categoryMap[selectedCategory];
+      const matchedCategory = !category || i.category === category;
+      return i.price >= minPrice && i.price <= maxPrice && matchedCategory;
     });
 
     currentProducts = filtered;
